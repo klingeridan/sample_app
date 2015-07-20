@@ -9,6 +9,10 @@ describe "Authentication" do
 
 		it { should have_selector('h1', 	text: 'Sign In') }
 		it { should have_selector('title', 	text: 'Sign In') }
+
+		it { should_not have_link('Users') }
+		it { should_not have_link('Profile') }
+		it { should_not have_link('Settings') }
 	end
 
 	describe "signin" do
@@ -108,6 +112,16 @@ describe "Authentication" do
 			describe "submitting a DELETE request to the Users#destroy action" do
 				before { delete user_path(user) }
 				specify { response.should redirect_to root_url }
+			end
+		end
+
+		describe "as admin user" do
+			let(:admin_user) { FactoryGirl.create(:admin) }
+
+			before { sign_in admin_user }
+
+			it "should not be able to delete himself" do
+				expect { delete user_path(admin_user) }.not_to change(User, :count)
 			end
 		end
 	end

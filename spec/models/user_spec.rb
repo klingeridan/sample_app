@@ -29,6 +29,17 @@ describe User do
   it { should be_valid }
   it { should_not be_admin }
 
+  describe "'admin' attribute should not be accessible" do
+    specify { expect { User.new(name:"a", email: "a@gmail.com", password:"foobar", password_confirmation:"foobar", admin: true) }.to raise_error }
+
+    # admin_param = { :admin => true }
+    # params = ActionController::Parameters.new(admin_param)
+    # expect { @user.update_attributes(params) }.should raise_error
+
+    # before { @user.admin = true }
+    # it { should_not be_valid }
+  end
+
   describe "with admin attribute set to 'true'" do
     before do
       @user.save!
